@@ -12,9 +12,8 @@
 const app = express();
 
 // je me connecte à la BDD
-mongoose.connect('mongodb+srv://new-user:<pwd>@cluster0.m31ja.mongodb.net/test?retryWrites=true&w=majority',
-  { useNewUrlParser: true,
-    useUnifiedTopology: true })
+mongoose.connect(process.env.DB_CODE,
+  { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
