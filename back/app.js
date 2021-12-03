@@ -1,8 +1,10 @@
 // je fais mes imports
   // pour créer des applis web avec Node
-const express = require("express");
+  const express = require("express");
   // pour faciliter les inéractions avec la bdd mongoDB
-const mongoose = require("mongoose");
+  const mongoose = require("mongoose");
+  // pour protéger les informations de connexion vers la BDD
+  require("dotenv").config();
 
 // je fais appel au module Express avec sa fonction
 // le mot-clé app fait souvent référence au module express

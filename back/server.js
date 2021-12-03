@@ -47,3 +47,19 @@ server.on("listening", () => {
 });
 
 server.listen(port);
+
+/* La structure du back-end est faite comme ceci :
+  - le front-end cherchant à communiquer avec le back-end va chercher
+  son point d'entrée par défaut, qui est le server.js
+  - server.js va alors traiter et envoyer la requête vers app.js
+  - app.js va envoyer la requête vers les routes; ici, on crée un dossier
+  pour les routes puisqu'il peut y en avoir plusieurs.
+  - ces routes vont alors passser d'abord par un système d'authentification
+  de l'utilisation, dans le dossier middleware, qui contient les deux fichiers
+  auth.js et multer.js
+  - on va ensuite passer au controllers, qui lui va faire le plus gros boulot
+  du CRUD : create, read, update, delete; la communication avec la BDD
+  se fait ici.
+  - le dossier models est un guide pour ce qui est possible de faire avec
+  la BDD.
+*/
