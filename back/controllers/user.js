@@ -53,6 +53,7 @@ exports.login = (req, res, next) => {
   // on vérifie si l'email utilisateur existe dans la BDD
   User.findOne({ email: req.body.email })
     .then((user) => {
+      console.log("user", user);
       if (!user) {
         // s'il n'existe pas
         return res
@@ -63,6 +64,7 @@ exports.login = (req, res, next) => {
         // on compare les entrées et les données
         .compare(req.body.password, user.password)
         .then((valid) => {
+          console.log("validation", valid);
           if (!valid) {
             // si c'est différent
             return res.status(401).json({ error: "Mot de passe incorrect !" });
@@ -73,7 +75,7 @@ exports.login = (req, res, next) => {
             token: jwt.sign(
               //contient les données qu'on veut encoder dans ce token
               { userId: user._id },
-              process.env.TOKEN, // avec une clé secrète
+              'process.env.TOKEN', // avec une clé secrète
               { expiresIn: "24h" } // qui est valide 24h
             ),
           });

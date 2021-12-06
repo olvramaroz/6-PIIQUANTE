@@ -9,8 +9,13 @@ require("dotenv").config();
 const path = require("path");
 // pour sécuriser les en-tête http de l'application express
 const helmet = require("helmet");
+// pour nettoyer les données fournies par l'utilisateur pour empêcher l'injection d'opérateur MongoDB.
+const sanitize = require("express-mongo-sanitize");
+
+
 // pour les routes vers l'utilisateur et les sauces
 const userRoutes = require("./routes/user");
+const sauceRoutes = require("./routes/sauce");
 
 // je me connecte à la BDD
 mongoose
@@ -31,6 +36,8 @@ module.exports = app;
 
 // je protège l'appli de certaines vulnerabilités en protégeant les en-têtes
 app.use(helmet());
+// je nettoie les données user pour éviter des injections dans la BDD
+app.use(sanitize());
 
 // Avant la route d'API, on ajoute la fonction (middleware) des headers permettant
 // aux deux ports front et end de communiquer entre eux
@@ -54,3 +61,4 @@ app.use(express.json());
 // je configure les routes d'API
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api/auth", userRoutes);
+app.use("/api/sauces", sauceRoutes);
