@@ -11,7 +11,8 @@ const path = require("path");
 const helmet = require("helmet");
 // pour nettoyer les données fournies par l'utilisateur pour empêcher l'injection d'opérateur MongoDB.
 const sanitize = require("express-mongo-sanitize");
-
+// pour ajouter la propriété "req.body" quand il analyse le corps des requêtes
+const bodyParser = require("body-parser");
 
 // pour les routes vers l'utilisateur et les sauces
 const userRoutes = require("./routes/user");
@@ -23,21 +24,13 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("Connexion à MongoDB réussie !"))
-  .catch(() => console.log("Connexion à MongoDB échouée !"));
+  .then(() => console.log("Connexion à la BDD réussie !"))
+  .catch(() => console.log("Connexion à la BDD échouée !"));
 
 // je fais appel au module Express avec sa fonction
 // le mot-clé app fait souvent référence au module express
 // on peut utiliser un autre nom, mais c'est la convention
 const app = express();
-
-// j'exporte ce module pour pouvoir le réutiliser ailleurs
-module.exports = app;
-
-// je protège l'appli de certaines vulnerabilités en protégeant les en-têtes
-app.use(helmet());
-// je nettoie les données user pour éviter des injections dans la BDD
-app.use(sanitize());
 
 // Avant la route d'API, on ajoute la fonction (middleware) des headers permettant
 // aux deux ports front et end de communiquer entre eux
@@ -55,10 +48,19 @@ app.use((req, res, next) => {
 });
 
 // je récupère le body en front sur l'objet request
-// remplace body-parser et analyse donc le corps de la requête
-app.use(express.json());
+// je parse le corps de la requête en objet json utilisable
+app.use(bodyParser.json());
+
+// je protège l'appli de certaines vulnerabilités en protégeant les en-têtes
+app.use(helmet());
+
+// je nettoie les données user pour éviter des injections dans la BDD
+app.use(sanitize());
 
 // je configure les routes d'API
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api/auth", userRoutes);
 app.use("/api/sauces", sauceRoutes);
+
+// j'exporte ce module pour pouvoir le réutiliser ailleurs
+module.exports = app;

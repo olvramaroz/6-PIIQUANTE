@@ -1,12 +1,12 @@
 {
-  "name": "back",
+  "name": "back-end du projet 6 Openclassrooms",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
   },
-  "author": "",
+  "author": "Ony Lalaina Valérie",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
