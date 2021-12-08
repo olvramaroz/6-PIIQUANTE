@@ -80,9 +80,14 @@ exports.modifySauce = (req, res, next) => {
 
 /// SUPPRIMER UNE SAUCE //
 exports.deleteSauce = (req, res, next) => {
-  Sauce.findOne({_id: req.params._id})
+  Sauce.findOne({_id: req.params.id})
   .then(sauce => {
-    const filename = sauce.imageURL.split("/images");
+    /* récupérer l'imageUrl retournée par la BDD, stockée dans /images/
+    qu'on peut split vu qu'elle est entre deux chemins /.../
+    split va retourner deux éléments dans un tableau :
+    xxxAxxx/images/xxxBxxx et on s'intéresse au nom du fichier,
+    donc le 2ème élément qui est B, d'où le [1] à la fin */
+    const filename = sauce.imageUrl.split("/images/")[1];
     // fonction pour supprimer l'image dans le système
     // et ensuite l'id correpondant
     fs.unlink(`images/${filename}`, () => {
