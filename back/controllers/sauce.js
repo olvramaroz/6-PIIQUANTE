@@ -1,5 +1,8 @@
 // j'importe les npm nécessaires 
 const Sauce = require("../models/sauce");
+// fs veut dire file-system, c'est ce qui nous permet de
+// modifier et supprimer un fichier
+const fs = require("fs");
 
 /// CREER LA SAUCE ///
 exports.createSauce = (req, res, next) => {
@@ -20,8 +23,8 @@ exports.createSauce = (req, res, next) => {
     });
     sauce
       .save() // sauvegarder la sauce dans la BDD
-      .then(() => res.status(201).json({message: "La sauce a bien été créée!"}))
-      .catch(error => res.status(400).json({ error }));
+      .then(() => res.status(201).json({message: "La sauce a bien été créée !"}))
+      .catch(error => res.status(400).json({error}));
       console.log("voici la bonne sauce créée", sauce);
   };
 
@@ -38,3 +41,49 @@ exports.getOneSauce = (req, res, next) => {
       .then(sauce => res.status(200).json(sauce)) // res : promesse ok
       .catch(error => res.status(404).json({error}));
   };
+
+/// MODIFIER UNE SAUCE //
+exports.modifySauce = (req, res, next) => {
+  if (req.file) { // si la request concerne le changement du file, donc l'image
+    Sauce.findOne({_id: req.params.id}) //on trouve la sauce concernée par son id
+      .then(sauce => {
+          // on suppr son image 
+        const filename = sauce.imageUrl.split("/images/")[1];
+          // on suppr le lien entre l'ancienne image et la sauce en question
+        fs.unlink(`images/${filename}`, () => {
+          // on met à jour le reste du <body>
+          const sauceObject = {
+            ...JSON.parse(req.body.sauce),
+            imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+          };
+          // on met à jour la sauce avec la nouvelle image
+          Sauce.updateOne(
+            { _id: req.params.id },
+            { ...sauceObject, _id: req.params.id }
+          )
+            .then(() => res.status(200).json({message: "la sauce a bien été modifiée !"}))
+            .catch(error => res.status(400).json({error}));
+        });
+      })
+      .catch(error => res.status(500).json({error}));
+  }
+  else { // si la modif n'a pas été portée sur l'image
+    const sauceObject = {...req.body}; // alors, récupérer le contenu du <body>
+    Sauce.updateOne( // et mettre à jour la sauce concernée
+      {_id: req.params.id},
+      {...sauceObject, _id: req.params.id}
+    )
+      .then(() => res.status(200).json({message: "la sauce a bien été modifiée !"}))
+      .catch(error => res.status(400).json({error}));
+  }
+};
+
+/// SUPPRIMER UNE SAUCE //
+exports.deleteSauce = (req, res, next) => {
+
+};
+
+/// LIKE OU DISLIKE UNE SAUCE //
+exports.likeSauce = (req, res, next) => {
+
+};
