@@ -19,7 +19,7 @@ router.get("/:id", auth, sauceCtrl.getOneSauce);
 // modifier une sauce, seul l'user qui a ajouté la sauce peut le faire
 router.put("/:id", auth, multer, sauceCtrl.modifySauce);
 // suppr une sauce, seul l'user qui a ajouté la sauce peut le faire
-// router.delete("/:id", auth, sauceCtrl.deleteSauce);
+router.delete("/:id", auth, sauceCtrl.deleteSauce);
 // ajoute ou enlève un like à la sauce
 // router.post("/:id/like", auth, sauceCtrl.likeSauce);
 
