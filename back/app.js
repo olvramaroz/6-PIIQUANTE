@@ -11,8 +11,8 @@ const path = require("path");
 const helmet = require("helmet");
 // pour nettoyer les données fournies par l'utilisateur pour empêcher l'injection d'opérateur MongoDB.
 const sanitize = require("express-mongo-sanitize");
-// pour ajouter la propriété "req.body" quand il analyse le corps des requêtes
-const bodyParser = require("body-parser");
+// // pour ajouter la propriété "req.body" quand il analyse le corps des requêtes
+// const bodyParser = require("body-parser");
 
 // pour les routes vers l'utilisateur et les sauces
 const userRoutes = require("./routes/user");
@@ -49,7 +49,9 @@ app.use((req, res, next) => {
 
 // je récupère le body en front sur l'objet request
 // je parse le corps de la requête en objet json utilisable
-app.use(bodyParser.json());
+// bodyParser est automatiquement intégré dans la dernière version
+// d'Express, donc inutile de l'installer à part
+app.use(express.json());
 
 // je protège l'appli de certaines vulnerabilités en protégeant les en-têtes
 app.use(helmet());
