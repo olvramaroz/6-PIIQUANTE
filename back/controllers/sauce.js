@@ -34,7 +34,7 @@ exports.getAllSauces = (req, res, next) => {
 
 /// AFFICHER UNE SAUCE //
 exports.getOneSauce = (req, res, next) => {
-    Sauce.findOn({ _id: req.params.id }) // retrouver un élément par son id
+    Sauce.findOne({ _id: req.params.id }) // retrouver un élément par son id
       .then(sauce => res.status(200).json(sauce)) // res : promesse ok
       .catch(error => res.status(404).json({error}));
   };
