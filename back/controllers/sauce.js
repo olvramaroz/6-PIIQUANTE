@@ -101,5 +101,45 @@ exports.deleteSauce = (req, res, next) => {
 
 /// LIKE OU DISLIKE UNE SAUCE //
 exports.likeSauce = (req, res, next) => {
-
+  // on récupère l'id du user, l'id de la sauce et le like.
+  const userId = req.body.userId;
+  const sauceId = req.params.id;
+  const like = req.body.like;
+  
+  Sauce.findOne({_id: sauceId})
+    .then(sauce => {
+      // on récupère les valeurs de like et dislike
+      const values = {
+        usersLiked: sauce.usersLiked,
+        usersDisliked: sauce.usersDisliked,
+        likes: 0,
+        dislikes: 0,
+      };
+      // on essaie plusieurs scénarios possibles avec la loop switch
+      switch (like) {
+        case 1: // on push si le user fait un like
+        values.usersLiked.push(userId);
+          break;
+        case -1: // on push si le user fait un dislike
+        values.usersDisliked.push(userId);
+          break;
+        case 0: // c'est la valeur par défaut, zéro like/dislike
+          if (values.usersLiked.includes(userId)) { // si le user annule son like
+            const index = values.usersLiked.indexOf(userId);
+            values.usersLiked.splice(index, 1);
+          } else { // si le user annule son dislike
+            const index = values.usersDisliked.indexOf(userId);
+            values.usersDisliked.splice(index, 1);
+          }
+          break;
+      }
+      // on calcule le nombre de likes et dislikes
+      values.likes = values.usersLiked.length;
+      values.dislikes = values.usersDisliked.length;
+      // on affiche la sauce avec les nouvelles valeurs
+      Sauce.updateOne({_id: sauceId}, values)
+        .then(() => res.status(200).json({message: "La sauce a bien été notée !"}))
+        .catch(error => res.status(400).json({error}));
+    })
+    .catch(error => res.status(500).json({error}));
 };
