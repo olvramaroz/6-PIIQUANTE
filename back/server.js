@@ -1,4 +1,4 @@
-// pour protéger les informations de connexion vers la BDD
+// pour protéger les informations de connexion vers la BDD MongoDB
 require("dotenv").config();
 
 const http = require("http");
