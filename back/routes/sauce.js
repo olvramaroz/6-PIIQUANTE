@@ -7,7 +7,7 @@ const router = express.Router();
 // j'importe les autres dépendances nécessaires
 const sauceCtrl = require("../controllers/sauce");
 const auth = require("../middleware/auth");
-const multer = require("../middleware/multer"); 
+const multer = require("../middleware/multer");
 
 // je configure les routes
 // ajouter une sauce, obligation de s'auth + multer qui gère les images

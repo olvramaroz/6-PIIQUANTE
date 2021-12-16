@@ -47,7 +47,7 @@ exports.modifySauce = (req, res, next) => {
   if (req.file) { // si la request concerne le changement du file, donc l'image
     Sauce.findOne({_id: req.params.id}) //on trouve la sauce concernée par son id
       .then(sauce => {
-          // on suppr son image 
+          // on suppr son image
         const filename = sauce.imageUrl.split("/images/")[1];
           // on suppr le lien entre l'ancienne image et la sauce en question
         fs.unlink(`images/${filename}`, () => {

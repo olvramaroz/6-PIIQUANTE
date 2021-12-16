@@ -11,8 +11,6 @@ const path = require("path");
 const helmet = require("helmet");
 // pour nettoyer les données fournies par l'utilisateur pour empêcher l'injection d'opérateur MongoDB.
 const sanitize = require("express-mongo-sanitize");
-// // pour ajouter la propriété "req.body" quand il analyse le corps des requêtes
-// const bodyParser = require("body-parser");
 
 // pour les routes vers l'utilisateur et les sauces
 const userRoutes = require("./routes/user");

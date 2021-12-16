@@ -1,3 +1,6 @@
+// pour protéger les informations de connexion vers la BDD
+require("dotenv").config();
+
 const http = require("http");
 const app = require("./app");
 
